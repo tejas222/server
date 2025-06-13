@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/authMiddleware');
-const { markAttendance, getAttendance } = require('../controllers/attendanceController');
+const {
+  markAttendance,
+  getMyAttendance,
+  getAllAttendance,
+} = require('../controllers/attendanceController');
 
-router.post('/mark', protect, markAttendance);
-router.get('/my', protect, getAttendance);
+const { protect, isAdmin } = require('../middleware/authMiddleware');
+
+router.post('/', protect, markAttendance);           // Mark attendance
+router.get('/mine', protect, getMyAttendance);       // View own
+router.get('/all', protect, isAdmin, getAllAttendance); // Admin only
 
 module.exports = router;
